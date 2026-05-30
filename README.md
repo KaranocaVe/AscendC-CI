@@ -1,11 +1,17 @@
 # AscendC-CI
 
-This repository contains a GitHub Actions workflow and a manual CLI entrypoint
-for building an Ascend custom operator project from:
+This repository contains a Docker-based CLI entrypoint for building an Ascend
+custom operator project from:
 
 - operator prototype json
 - `op_host/`
 - `op_kernel/`
+
+Default build image:
+
+```text
+swr.cn-southwest-2.myhuaweicloud.com/fuyangchenghu/cann8.5:s8
+```
 
 Manual CLI entrypoint:
 
@@ -18,7 +24,7 @@ Manual CLI entrypoint:
   --compute-unit ai_core-ascend910b4
 ```
 
-If the current environment already has the required Python packages such as
+If the selected Docker image already has the required Python packages such as
 `numpy`, `scipy`, and `protobuf`, you can skip that step:
 
 ```bash
@@ -36,39 +42,13 @@ Shared internal scripts:
 - `scripts/install_cann_python_deps.sh`
 - `scripts/build_run_package.sh`
 
-The build path is the verified:
+Container-internal build path:
 
 ```bash
 source ~/.bashrc
 msopgen gen -f pytorch -c ai_core-ascend910b4 -lan cpp -out <output_dir>
 ./build.sh
 ```
-
-The GitHub Actions job currently runs in:
-
-```text
-ascendai/cann:8.5.2-910b-openeuler24.03-py3.11
-```
-
-Local validation in this thread used:
-
-```text
-swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:8.5.2-910b-ubuntu22.04-py3.11
-```
-
-and uploads:
-
-- `build_out/custom_opp_*.run`
-- the full `build_out/` directory
-
-Manual trigger inputs:
-
-- `operator_json`
-- `operator_host_dir`
-- `operator_kernel_dir`
-- `framework`
-- `compute_unit`
-- `language`
 
 Current validated example:
 
@@ -87,4 +67,16 @@ Validated manual example:
   --kernel-dir "$(pwd)/demo/pdist_grad/op_kernel" \
   --framework pytorch \
   --compute-unit ai_core-ascend910b4
+```
+
+If you need to override the image:
+
+```bash
+./build.sh \
+  --json "$(pwd)/demo/pdist_grad/pdist_grad.json" \
+  --host-dir "$(pwd)/demo/pdist_grad/op_host" \
+  --kernel-dir "$(pwd)/demo/pdist_grad/op_kernel" \
+  --framework pytorch \
+  --compute-unit ai_core-ascend910b4 \
+  --image your.registry.example/cann:tag
 ```
