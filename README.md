@@ -1,23 +1,40 @@
 # AscendC-CI
 
-This repository contains a GitHub Actions workflow for building an Ascend custom
-operator project from:
+This repository contains a GitHub Actions workflow and a manual CLI entrypoint
+for building an Ascend custom operator project from:
 
 - operator prototype json
 - `op_host/`
 - `op_kernel/`
 
-The workflow currently mirrors the verified local sequence:
+Manual CLI entrypoint:
 
 ```bash
-./scripts/install_cann_python_deps.sh
-./scripts/build_run_package.sh \
+./build.sh \
   --json /abs/path/op.json \
   --host-dir /abs/path/op_host \
   --kernel-dir /abs/path/op_kernel \
   --framework pytorch \
   --compute-unit ai_core-ascend910b4
 ```
+
+If the current environment already has the required Python packages such as
+`numpy`, `scipy`, and `protobuf`, you can skip that step:
+
+```bash
+./build.sh \
+  --json /abs/path/op.json \
+  --host-dir /abs/path/op_host \
+  --kernel-dir /abs/path/op_kernel \
+  --framework pytorch \
+  --compute-unit ai_core-ascend910b4 \
+  --skip-python-deps
+```
+
+Shared internal scripts:
+
+- `scripts/install_cann_python_deps.sh`
+- `scripts/build_run_package.sh`
 
 The build path is the verified:
 
@@ -60,3 +77,14 @@ Current validated example:
 - `operator_kernel_dir`: `DoNotSubmitThisFolder/PdistGrad/op_kernel`
 - `framework`: `pytorch`
 - `compute_unit`: `ai_core-ascend910b4`
+
+Validated manual example:
+
+```bash
+./build.sh \
+  --json "$(pwd)/DoNotSubmitThisFolder/PdistGrad/pdist_grad.json" \
+  --host-dir "$(pwd)/DoNotSubmitThisFolder/PdistGrad/op_host" \
+  --kernel-dir "$(pwd)/DoNotSubmitThisFolder/PdistGrad/op_kernel" \
+  --framework pytorch \
+  --compute-unit ai_core-ascend910b4
+```

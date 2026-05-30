@@ -3,3 +3,6 @@ github action使用ascendai/cann:8.5.2-910b-openeuler24.03-py3.11
 注意均为arm
 
 msopgen gen -f pytorch -c ai_core-ascend910b4 -lan cpp
+
+仓库手工构建入口：
+./build.sh --json /abs/path/op.json --host-dir /abs/path/op_host --kernel-dir /abs/path/op_kernel --framework pytorch --compute-unit ai_core-ascend910b4

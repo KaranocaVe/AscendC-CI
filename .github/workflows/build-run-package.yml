@@ -41,19 +41,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Prepare Python Dependencies
+      - name: Build Run Package
         shell: bash
         run: |
           set -euo pipefail
-          chmod +x scripts/install_cann_python_deps.sh
-          ./scripts/install_cann_python_deps.sh
-
-      - name: Build Operator Project
-        shell: bash
-        run: |
-          set -euo pipefail
-          chmod +x scripts/build_run_package.sh
-          ./scripts/build_run_package.sh \
+          chmod +x ./build.sh
+          ./build.sh \
             --json "${GITHUB_WORKSPACE}/${{ inputs.operator_json }}" \
             --host-dir "${GITHUB_WORKSPACE}/${{ inputs.operator_host_dir }}" \
             --kernel-dir "${GITHUB_WORKSPACE}/${{ inputs.operator_kernel_dir }}" \
