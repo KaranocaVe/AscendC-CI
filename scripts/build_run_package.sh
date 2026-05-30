@@ -33,6 +33,8 @@ require_arg() {
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+# shellcheck source=source_cann_env.sh
+source "${SCRIPT_DIR}/source_cann_env.sh"
 
 JSON_PATH=""
 HOST_DIR=""
@@ -104,9 +106,7 @@ fi
 rm -rf "$WORKSPACE"
 mkdir -p "$WORKSPACE"
 
-set +u
-source ~/.bashrc
-set -u
+source_cann_env
 
 MSOPGEN_ARGS=(
   -i "$JSON_PATH"

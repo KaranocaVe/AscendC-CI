@@ -2,9 +2,11 @@
 
 set -euo pipefail
 
-set +u
-source ~/.bashrc
-set -u
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=source_cann_env.sh
+source "${SCRIPT_DIR}/source_cann_env.sh"
+
+source_cann_env
 
 pip3 install wheel==0.38.4
 pip3 install pyyaml==6.0.1
