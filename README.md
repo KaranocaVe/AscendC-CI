@@ -72,9 +72,9 @@ Manual trigger inputs:
 
 Current validated example:
 
-- `operator_json`: `DoNotSubmitThisFolder/PdistGrad/pdist_grad.json`
-- `operator_host_dir`: `DoNotSubmitThisFolder/PdistGrad/op_host`
-- `operator_kernel_dir`: `DoNotSubmitThisFolder/PdistGrad/op_kernel`
+- `operator_json`: `demo/pdist_grad/pdist_grad.json`
+- `operator_host_dir`: `demo/pdist_grad/op_host`
+- `operator_kernel_dir`: `demo/pdist_grad/op_kernel`
 - `framework`: `pytorch`
 - `compute_unit`: `ai_core-ascend910b4`
 
@@ -82,9 +82,9 @@ Validated manual example:
 
 ```bash
 ./build.sh \
-  --json "$(pwd)/DoNotSubmitThisFolder/PdistGrad/pdist_grad.json" \
-  --host-dir "$(pwd)/DoNotSubmitThisFolder/PdistGrad/op_host" \
-  --kernel-dir "$(pwd)/DoNotSubmitThisFolder/PdistGrad/op_kernel" \
+  --json "$(pwd)/demo/pdist_grad/pdist_grad.json" \
+  --host-dir "$(pwd)/demo/pdist_grad/op_host" \
+  --kernel-dir "$(pwd)/demo/pdist_grad/op_kernel" \
   --framework pytorch \
   --compute-unit ai_core-ascend910b4
 ```
