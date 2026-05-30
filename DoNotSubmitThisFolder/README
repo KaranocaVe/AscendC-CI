@@ -1,0 +1,5 @@
+github action使用ascendai/cann:8.5.2-910b-openeuler24.03-py3.11
+本机调试使用swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:8.5.2-910b-openeuler24.03-py3.11
+注意均为arm
+
+msopgen gen -f pytorch -c ai_core-ascend910b4 -lan cpp

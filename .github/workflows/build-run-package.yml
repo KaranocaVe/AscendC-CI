@@ -1,0 +1,77 @@
+name: Build Run Package
+
+on:
+  workflow_dispatch:
+    inputs:
+      operator_json:
+        description: Path to operator prototype json in the repo
+        required: true
+        type: string
+      operator_host_dir:
+        description: Path to op_host directory in the repo
+        required: true
+        type: string
+      operator_kernel_dir:
+        description: Path to op_kernel directory in the repo
+        required: true
+        type: string
+      framework:
+        description: Framework passed to msopgen
+        required: true
+        default: pytorch
+        type: string
+      compute_unit:
+        description: Compute unit passed to msopgen
+        required: true
+        default: ai_core-ascend910b4
+        type: string
+      language:
+        description: Language passed to msopgen
+        required: true
+        default: cpp
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04-arm
+    container:
+      image: ascendai/cann:8.5.2-910b-openeuler24.03-py3.11
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare Python Dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          chmod +x scripts/install_cann_python_deps.sh
+          ./scripts/install_cann_python_deps.sh
+
+      - name: Build Operator Project
+        shell: bash
+        run: |
+          set -euo pipefail
+          chmod +x scripts/build_run_package.sh
+          ./scripts/build_run_package.sh \
+            --json "${GITHUB_WORKSPACE}/${{ inputs.operator_json }}" \
+            --host-dir "${GITHUB_WORKSPACE}/${{ inputs.operator_host_dir }}" \
+            --kernel-dir "${GITHUB_WORKSPACE}/${{ inputs.operator_kernel_dir }}" \
+            --framework "${{ inputs.framework }}" \
+            --compute-unit "${{ inputs.compute_unit }}" \
+            --language "${{ inputs.language }}" \
+            --workspace "${GITHUB_WORKSPACE}/.build/op-project"
+
+      - name: Upload run package
+        uses: actions/upload-artifact@v4
+        with:
+          name: run-package
+          path: .build/op-project/build_out/*.run*
+          if-no-files-found: error
+
+      - name: Upload build_out
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-out
+          path: .build/op-project/build_out
+          if-no-files-found: error
